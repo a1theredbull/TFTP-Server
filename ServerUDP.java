@@ -49,7 +49,7 @@ class RequestHandler implements Runnable
 	DatagramPacket receivePacket;
 	byte[] opcode = new byte[2];
 
-	ClientHandler(DatagramPacket receivePacket, byte[] receiveData)
+	RequestHandler(DatagramPacket receivePacket, byte[] receiveData)
 	{
 		this.receivePacket = receivePacket;
 		this.receiveData = receiveData;
