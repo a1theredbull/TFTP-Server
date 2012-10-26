@@ -4,7 +4,7 @@ import java.net.*;
 class ServerUDP
 {
 	private static final int MAX_BYTES = 512;
-	private static final int PORT = 9800;
+	private static final int PORT = 69;
 
 	private File readDirectory, writeDirectory;
 
