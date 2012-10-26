@@ -4,7 +4,7 @@ import java.net.*;
 class ServerUDP
 {
 	private static final int MAX_BYTES = 512;
-	private static final int PORT = 69;
+	private static final int PORT = 9800;
 
 	private File readDirectory, writeDirectory;
 
@@ -18,7 +18,7 @@ class ServerUDP
 			try
 			{
 				serverSocket.receive(receivePacket);
-				Runnable r = new ClientHandler(receivePacket, receiveData);
+				Runnable r = new RequestHandler(receivePacket, receiveData);
 				Thread t = new Thread(r);
 				t.start();
 			}
@@ -41,7 +41,7 @@ class ServerUDP
 	}
 }
 
-class ClientHandler implements Runnable
+class RequestHandler implements Runnable
 {
 	private static final int MAX_BYTES = 512;
 
@@ -57,15 +57,13 @@ class ClientHandler implements Runnable
 
 	public void run()
 	{
-		decodeBytes(receiveData);
+		setOpcode(receiveData);
+		System.out.println(new String(opcode) + '\n');
 	}
 
-	public boolean decodeBytes(byte[] toDecode)
+	public void setOpcode(byte[] packetBytes)
 	{
-		String str = new String(toDecode);
-		System.out.println(str);
-		opcode[0] = toDecode[0];
-		opcode[1] = toDecode[1];
-		return true;
+		opcode[0] = packetBytes[0];
+		opcode[1] = packetBytes[1];
 	}
 }
