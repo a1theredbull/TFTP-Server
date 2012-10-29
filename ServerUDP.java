@@ -6,8 +6,6 @@ class ServerUDP
 	private static final int MAX_BYTES = 512;
 	private static final int PORT = 69;
 
-	private File readDirectory, writeDirectory;
-
 	public static void main(String args[]) throws Exception
 	{
 		DatagramSocket serverSocket = new DatagramSocket(PORT);
@@ -45,25 +43,43 @@ class RequestHandler implements Runnable
 {
 	private static final int MAX_BYTES = 512;
 
-	byte[] receiveData;
+	byte[] packetBytes;
 	DatagramPacket receivePacket;
-	byte[] opcode = new byte[2];
+	int opcode;
+	private File readDirectory, writeDirectory;
 
-	RequestHandler(DatagramPacket receivePacket, byte[] receiveData)
+	RequestHandler(DatagramPacket receivePacket, byte[] packetBytes)
 	{
 		this.receivePacket = receivePacket;
-		this.receiveData = receiveData;
+		this.packetBytes = packetBytes;
+		readDirectory = new File("C:/Users/user/Desktop");
+		writeDirectory = new File("C:/Users/user/Desktop");
 	}
 
 	public void run()
 	{
-		setOpcode(receiveData);
-		System.out.println(new String(opcode) + '\n');
+		opcode = packetBytes[1];
+		doOperation(opcode);
 	}
 
-	public void setOpcode(byte[] packetBytes)
+	private void doOperation(int opcode)
 	{
-		opcode[0] = packetBytes[0];
-		opcode[1] = packetBytes[1];
+		if(opcode == 1) //read request received
+			doReadRequest();
+		else if(opcode == 2); //write request received
+			//doWriteRequest();
+		else if(opcode == 3); //data packet received
+			//writeToFile();
+		else if(opcode == 4); //acknowledgment packet received
+			//getAcknowledgment();
+		else if(opcode == 5); //error packet received
+			//displayError();
+	}
+
+	private void doReadRequest()
+	{
+		//receiveData[0], receiveData[1] = 0;
+		String parsedPacket = new String(packetBytes);
+		System.out.println(parsedPacket);
 	}
 }
