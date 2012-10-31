@@ -1,14 +1,26 @@
 import java.io.*;
 import java.net.*;
 
-class ServerUDP
+public class ServerUDP
 {
 	private static final int MAX_BYTES = 512;
 	private static final int PORT = 69;
+	DatagramSocket serverSocket;
 
-	public static void main(String args[]) throws Exception
+	public ServerUDP()
 	{
-		DatagramSocket serverSocket = new DatagramSocket(PORT);
+		try
+		{
+			serverSocket = new DatagramSocket(PORT);
+		}
+		catch(SocketException ex)
+		{
+			System.err.println("SERVER START FAIL: " + ex);
+		}
+	}
+	
+	public void runServer()
+	{
 		while(true)
 		{
 			byte[] receiveData = new byte[MAX_BYTES];
@@ -25,7 +37,7 @@ class ServerUDP
 				System.err.println("Failed to receive.\n");
 				System.exit(1);
 			}
-		}
+		}	
 	}
 }
 
@@ -73,7 +85,8 @@ class RequestHandler implements Runnable
 			//doWriteRequest();
 		else if(opcode == 3); //data packet received
 			//writeToFile();
-		else if(opcode == 4); //acknowledgment packet received
+		else if(opcode == 4) //acknowledgment packet received
+			System.out.println("Acknowledgment received");
 			//getAcknowledgment();
 		else if(opcode == 5); //error packet received
 			//displayError();
@@ -92,7 +105,6 @@ class RequestHandler implements Runnable
 		System.out.println("T Size: " + T_SIZE);
 		
 		String fileToSendPath = readDirectory + filename;
-		System.out.println(fileToSendPath);
 		
 		try
 		{
@@ -126,14 +138,13 @@ class RequestHandler implements Runnable
 				
 				sendPacket = new DatagramPacket(
 						sendBytes, sendBytes.length, IPAddress, port);
-				
 				serverSocket.send(sendPacket);
 				
+				System.out.println(remainingLength);
 				remainingLength -= BLOCK_SIZE;	
 				fileDataOffset += BLOCK_SIZE;
 				blockNum++;
-			}
-			while(remainingLength > 0);
+			} while(remainingLength > 0);
 		}
 		catch(IOException ex)
 		{
@@ -155,7 +166,6 @@ class RequestHandler implements Runnable
 		try
 		{
 			String packetStr = d.readLine();
-			System.out.println(packetStr);
 			splitter = packetStr.split("\0");
 		}
 		catch(IOException ex)
@@ -165,5 +175,10 @@ class RequestHandler implements Runnable
 		}
 		
 		return splitter;
+	}
+	
+	private void sendOACK()
+	{
+		
 	}
 }
