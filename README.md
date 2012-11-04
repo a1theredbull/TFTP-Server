@@ -1,6 +1,6 @@
 TFTP-Server
 ===========
 
-School project: Implements a TFTP server that will be compatible with the given client (will be in here eventually).
+School project: Implements a TFTP server that will be compatible with the given client.
 
-First commit: Code professor gave us to start out.
+Update: Updated basic TFTP functionality.

@@ -2,20 +2,10 @@ import java.util.concurrent.*;
 
 public class RequestStorage
 {
-	ConcurrentHashMap<String, RequestHandler> requestHash;
+	public ConcurrentHashMap<String, Request> requests;
 	
 	public RequestStorage()
 	{
-		requestHash = new ConcurrentHashMap<String, RequestHandler>();
-	}
-	
-	public RequestHandler getRequest(String ip)
-	{
-		return requestHash.get(ip);
-	}
-	
-	public void putRequest(String ip, RequestHandler request)
-	{
-		requestHash.put(ip, request);
+		requests = new ConcurrentHashMap<String, Request>();
 	}
 }
