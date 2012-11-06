@@ -185,7 +185,6 @@ public class RequestHandler implements Runnable
 		try
 		{
 			String packetStr = d.readLine();
-			System.out.println(packetStr);
 			splitter = packetStr.split("\0");
 		}
 		catch(IOException ex)
@@ -290,23 +289,7 @@ public class RequestHandler implements Runnable
 		
 		byte[] trimmed = new byte[byteOffset+1];
 		for(int i = 0; i < byteOffset+1; i++)
-			trimmed[i] = OACKBytes[i];
-		
-		ByteArrayInputStream bais = new ByteArrayInputStream(trimmed);
-		BufferedReader d = new BufferedReader(new InputStreamReader(bais));
-		String[] splitter = null;
-		
-		try
-		{
-			String packetStr = d.readLine();
-			System.out.println(packetStr);
-			splitter = packetStr.split("\0");
-		}
-		catch(IOException ex)
-		{
-			System.err.println("FAIL PARSING: " + ex);
-			System.exit(1);
-		}		
+			trimmed[i] = OACKBytes[i];	
 		
 		try
 		{
