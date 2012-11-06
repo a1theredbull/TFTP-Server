@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.*;
 import java.net.*;
 import java.io.*;
 
@@ -8,14 +7,12 @@ public class Server
 	private static final int MAX_BYTES = 2048;
 	private static final int PORT = 69;
 	private DatagramSocket serverSocket;
-	private RequestStorage storage;
 
 	public Server()
 	{
 		try
 		{
 			serverSocket = new DatagramSocket(PORT);
-			storage = new RequestStorage();
 		}
 		catch(SocketException ex)
 		{
@@ -39,18 +36,13 @@ public class Server
 				for(int i = 0; i < receivedBytes.length; i++)
 					receivedBytes[i] = rawData[i];
 				
-				InetAddress ip = receivedPacket.getAddress();
-				String ipKey = ip.toString();
-				
-				storage.requests.putIfAbsent(ipKey, new Request(ip));
-				
-				Runnable r = new PacketHandler(receivedBytes, receivedPacket, storage, serverSocket);
+				Runnable r = new RequestHandler(receivedPacket, receivedBytes);
 				Thread t = new Thread(r);
 				t.start();
 			}
 			catch(IOException ex)
 			{
-				System.err.println("Failed receiving packets: " + ex);
+				System.err.println("Server failed receiving packets: " + ex);
 				System.exit(1);
 			}
 		}	

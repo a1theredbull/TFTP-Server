@@ -12,13 +12,16 @@ class Request
 	public String requestedWriteDir = "C:/Users/Alex/Desktop/Test/";
 	public String filename;
 	public InetAddress ip;
-	public int port;
+	public int port, sendToPort;
 	
 	public int currAckNum = 1;
+	public int lastAckNum = -1;
 	public ArrayList<byte[]> blocks = new ArrayList<byte[]>();
 	
-	public Request(InetAddress ip)
+	public Request(InetAddress ip, int sendToPort, int port)
 	{
 		this.ip = ip;
+		this.sendToPort = sendToPort;
+		this.port = port;
 	}
 }
